@@ -1,0 +1,33 @@
+test:
+  topic: test-default
+spring:
+  kafka:
+    bootstrap-servers: 172.17.3.35:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: test-consumers
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      schema.registry.url: https://172.17.3.35:8085
+      security:
+        protocol: SASL_SSL
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule
+              required username="client" password="client-secret";
+        mechanism: PLAIN
+      ssl:
+        endpoint:
+          identification:
+            algorithm: ''
+    ssl:
+      trust-store-location: file:/root/test/app.truststore.jks
+      trust-store-password: confluent
+
+logging:
+  level:
+    root: debug

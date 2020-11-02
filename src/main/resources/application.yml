@@ -1,0 +1,42 @@
+test:
+  topic: test-default
+spring:
+  kafka:
+    bootstrap-servers: 172.17.3.35:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: test-consumers
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      schema.registry.url: https://localhost:8085
+      schema.registry.ssl.truststore.location: file:/root/docker-repos/kafka-docker-playground/environment/sasl-ssl/security/kafka.client.truststore.jks
+      schema.registry.ssl.truststore.password: confluent
+      schema.registry.ssl.keystore.location: file:/root/docker-repos/kafka-docker-playground/environment/sasl-ssl/security/kafka.client.keystore.jks
+      schema.registry.ssl.keystore.password: confluent
+      schema.registry.ssl.key.password: confluent
+      kafkastore.sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="schema-registry" password="schema-registry-secret";
+      kafkastore.security.protocol: SASL_SSL
+      kafkastore.sasl.mechanism: PLAIN
+
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule
+            required username="client" password="client-secret";
+        mechanism: PLAIN
+      security:
+        protocol: SASL_SSL
+      ssl:
+        endpoint:
+          identification:
+            algorithm: ''
+    ssl:
+      trust-store-location: file:/root/docker-repos/kafka-docker-playground/environment/sasl-ssl/security/kafka.client.truststore.jks
+      trust-store-password: confluent
+
+logging:
+  level:
+    root: debug
